@@ -1,0 +1,12 @@
+# Maven build
+target/
+
+# Idea
+.idea/
+*.iml
+
+# NPM
+node_modules/
+
+# Bower
+src/main/webapp/vendors

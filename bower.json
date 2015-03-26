@@ -1,0 +1,27 @@
+{
+  "name": "backbone-isomorphic",
+  "version": "0.1.0",
+  "authors": [
+    "Mickael Jeanroy <mickael.jeanroy@gmail.com>"
+  ],
+  "keywords": [],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "requirejs": "2.1.15",
+    "mustache": "1.2.0",
+    "jquery": "1.11.2",
+    "underscore": "1.7.0",
+    "backbone": "1.1.2"
+  },
+  "devDependencies": {
+    "jasmine-utils": "0.1.4"
+  }
+}
