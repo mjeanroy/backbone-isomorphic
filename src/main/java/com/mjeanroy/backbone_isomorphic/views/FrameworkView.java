@@ -24,26 +24,34 @@
 
 package com.mjeanroy.backbone_isomorphic.views;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.mjeanroy.springmvc.view.mustache.core.ModelAndMustacheView;
+import com.mjeanroy.backbone_isomorphic.controllers.FrameworkController;
+import com.mjeanroy.backbone_isomorphic.models.Framework;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.github.mjeanroy.springmvc.view.mustache.core.ModelAndMustacheView;
-import com.mjeanroy.backbone_isomorphic.controllers.FrameworkController;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Controller
 public class FrameworkView {
 
 	@Autowired
+	private ObjectMapper objectMapper;
+
+	@Autowired
 	private FrameworkController frameworkController;
 
 	@RequestMapping(value = { "/", "/frameworks" }, method = GET)
-	public ModelAndView frameworkView() {
+	public ModelAndView frameworkView() throws JsonProcessingException {
+		Iterable<Framework> frameworks = frameworkController.query();
+
 		ModelAndView modelAndView = new ModelAndMustacheView("frameworks");
-		modelAndView.addObject("frameworks", frameworkController.query());
+		modelAndView.addObject("frameworks", frameworks);
+		modelAndView.addObject("_frameworks_", objectMapper.writeValueAsString(frameworks));
 		return modelAndView;
 	}
 }

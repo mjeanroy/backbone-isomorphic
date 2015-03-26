@@ -30,13 +30,13 @@ define(['jquery', 'underscore', 'backbone', 'js/collection/frameworks'], functio
 			// If data is set in html
 			var data = $('#_frameworks_').text();
 			if (data) {
-				data = JSON.parseJSON(data);
+				data = JSON.parse(data);
 			}
 
 			this.collection = new Frameworks();
-			this.listenToOnce(this.collection, 'reset', this.render);
 
 			if (!data) {
+				this.listenToOnce(this.collection, 'sync', this.render);
 				this.collection.fetch();
 			}
 		},

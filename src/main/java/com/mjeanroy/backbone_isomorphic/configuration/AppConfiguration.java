@@ -24,43 +24,69 @@
 
 package com.mjeanroy.backbone_isomorphic.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.mjeanroy.springmvc.view.mustache.configuration.EnableMustache;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.resource.GzipResourceResolver;
 import org.springframework.web.servlet.resource.PathResourceResolver;
+import org.springframework.web.util.UrlPathHelper;
 
-import com.github.mjeanroy.springmvc.view.mustache.configuration.EnableMustache;
+import java.util.List;
 
 @Configuration
 @EnableWebMvc
 @EnableMustache
 @ComponentScan(basePackages = "com.mjeanroy.backbone_isomorphic")
-public class AppConfiguration extends WebMvcConfigurationSupport {
+public class AppConfiguration extends WebMvcConfigurerAdapter {
 
-	@Bean
-	public RequestMappingHandlerMapping requestMappingHandlerMapping() {
-		RequestMappingHandlerMapping handlerMapping = super.requestMappingHandlerMapping();
-		handlerMapping.setAlwaysUseFullPath(true);
-		handlerMapping.setUseSuffixPatternMatch(false);
-		return handlerMapping;
+	@Override
+	public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+		for (HttpMessageConverter<?> httpMessageConverter : converters) {
+			if (httpMessageConverter instanceof MappingJackson2HttpMessageConverter) {
+				((MappingJackson2HttpMessageConverter) httpMessageConverter).setObjectMapper(jsonObjectMapper());
+			}
+		}
+	}
+
+	@Override
+	public void configurePathMatch(PathMatchConfigurer configurer) {
+		UrlPathHelper urlPathHelper = new UrlPathHelper();
+		urlPathHelper.setAlwaysUseFullPath(true);
+
+		configurer.setUseSuffixPatternMatch(false)
+				.setUrlPathHelper(urlPathHelper);
 	}
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/vendors/**/*.js")
-				.addResourceLocations("/vendors/")
+		registry.addResourceHandler("/**/*.js")
+				.addResourceLocations("/")
 				.setCachePeriod(3600)
 				.resourceChain(true)
+				.addResolver(new GzipResourceResolver())
 				.addResolver(new PathResourceResolver());
 
 		registry.addResourceHandler("/**/*.html")
 				.addResourceLocations("/")
-				.setCachePeriod(3600)
 				.resourceChain(true)
+				.addResolver(new GzipResourceResolver())
 				.addResolver(new PathResourceResolver());
+	}
+
+	@Bean
+	public ObjectMapper jsonObjectMapper() {
+		return Jackson2ObjectMapperBuilder.json()
+				.failOnEmptyBeans(false)
+				.failOnUnknownProperties(false)
+				.build();
 	}
 }
