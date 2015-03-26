@@ -22,21 +22,26 @@
  * THE SOFTWARE.
  */
 
-define(['backbone', 'mustache', 'js/router/router', 'js/views/header-view'], function(Backbone, Mustache, Router, Header) {
-	window.app = {
-		start: function() {
-			// Define compile function with Mustache
-			Backbone.$compile = function() {
-				return Mustache.to_html.apply(Mustache, arguments);
-			};
+define(['backbone', 'js/views/framework-view'], function (Backbone, Frameworks) {
 
-			// Initialize main view
-			this.header = new Header();
-			this.router = new Router();
+	return Backbone.Router.extend({
+		routes: {
+			'frameworks/:lang': 'showFrameworks'
+		},
+
+		initialize: function() {
+			Backbone.history.start({
+				pushState: true
+			});
+		},
+
+		showFrameworks: function(lang) {
+			app.mainView = new Frameworks({
+				lang: lang
+			});
 
 			return this;
 		}
-	};
+	});
 
-	return app;
 });

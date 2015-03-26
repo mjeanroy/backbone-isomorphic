@@ -25,7 +25,14 @@
 define(['backbone', 'js/models/framework'], function(Backbone, Framework) {
 
 	return Backbone.Collection.extend({
-		url: '/api/frameworks',
+		initialize: function(models, options) {
+			this.lang = options.lang;
+		},
+
+		url: function() {
+			return '/api/frameworks/' + this.lang;
+		},
+
 		Model: Framework
 	});
 

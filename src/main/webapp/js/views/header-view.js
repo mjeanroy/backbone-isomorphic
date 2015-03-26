@@ -22,21 +22,28 @@
  * THE SOFTWARE.
  */
 
-define(['backbone', 'mustache', 'js/router/router', 'js/views/header-view'], function(Backbone, Mustache, Router, Header) {
-	window.app = {
-		start: function() {
-			// Define compile function with Mustache
-			Backbone.$compile = function() {
-				return Mustache.to_html.apply(Mustache, arguments);
-			};
+define(['jquery', 'backbone'], function ($, Backbone) {
 
-			// Initialize main view
-			this.header = new Header();
-			this.router = new Router();
+	return Backbone.View.extend({
+		el: '#header',
 
-			return this;
+		events: {
+			'click a': 'navigate'
+		},
+
+		navigate: function(e) {
+			e.preventDefault();
+			var $target = $(e.currentTarget);
+
+			// Update active link
+			this.$el.find('li').removeClass('active');
+			$target.parent().addClass('active');
+
+			// Navigate to current url
+			app.router.navigate($target.attr('href'), {
+				trigger: true
+			});
 		}
-	};
+	});
 
-	return app;
 });

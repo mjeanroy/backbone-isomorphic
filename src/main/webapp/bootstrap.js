@@ -22,10 +22,6 @@
  * THE SOFTWARE.
  */
 
-/**
- * Application bootstrap.
- */
-
 // RequireJS Configuration.
 require.config({
 	paths: {
@@ -36,7 +32,6 @@ require.config({
 	}
 });
 
-require(['js/app', 'mustache'], function(app, Mustache) {
-	console.log('app = ', app, Mustache);
+require(['js/app'], function(app) {
 	app.start();
 });

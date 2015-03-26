@@ -75,6 +75,20 @@ public class AppConfiguration extends WebMvcConfigurerAdapter {
 				.addResolver(new GzipResourceResolver())
 				.addResolver(new PathResourceResolver());
 
+		registry.addResourceHandler("/**/*.css")
+				.addResourceLocations("/")
+				.setCachePeriod(3600)
+				.resourceChain(true)
+				.addResolver(new GzipResourceResolver())
+				.addResolver(new PathResourceResolver());
+
+		registry.addResourceHandler("/**/*.map")
+				.addResourceLocations("/")
+				.setCachePeriod(3600)
+				.resourceChain(true)
+				.addResolver(new GzipResourceResolver())
+				.addResolver(new PathResourceResolver());
+
 		registry.addResourceHandler("/**/*.html")
 				.addResourceLocations("/")
 				.resourceChain(true)

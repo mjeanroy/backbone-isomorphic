@@ -22,21 +22,15 @@
  * THE SOFTWARE.
  */
 
-define(['backbone', 'mustache', 'js/router/router', 'js/views/header-view'], function(Backbone, Mustache, Router, Header) {
-	window.app = {
-		start: function() {
-			// Define compile function with Mustache
-			Backbone.$compile = function() {
-				return Mustache.to_html.apply(Mustache, arguments);
-			};
+body {
+  padding-top: 70px;
+  padding-bottom: 70px;
+}
 
-			// Initialize main view
-			this.header = new Header();
-			this.router = new Router();
-
-			return this;
-		}
-	};
-
-	return app;
-});
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+}

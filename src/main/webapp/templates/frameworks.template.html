@@ -1,9 +1,23 @@
 <div>
-	List of awesome frameworks:
-	<ul>
-		{{#frameworks}}<li>{{name}}</li>{{/frameworks}}
-	</ul>
+	<table class="table table-striped table-bordered table-hover">
+		<thead>
+			<tr>
+				<th>Rank</th>
+				<th>Name</th>
+			</tr>
+		</thead>
+		<tbody>
+			{{#frameworks}}
+				<tr>
+					<td>{{id}}</td>
+					<td>{{name}}</td>
+				</tr>
+			{{/frameworks}}
+		</tbody>
+	</table>
 </div>
 
 <!-- Isomorphic application -->
-<script id="_frameworks_" type="application/json">{{{_frameworks_}}}</script>
+{{#_frameworks_}}
+	<script id="_frameworks_" type="application/json">{{{_frameworks_}}}</script>
+{{/_frameworks_}}

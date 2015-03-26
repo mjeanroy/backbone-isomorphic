@@ -24,24 +24,47 @@
 
 package com.mjeanroy.backbone_isomorphic.controllers;
 
-import static java.util.Arrays.asList;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-
+import com.mjeanroy.backbone_isomorphic.models.Framework;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mjeanroy.backbone_isomorphic.models.Framework;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableMap;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
 public class FrameworkController {
 
-	@RequestMapping(value = "/api/frameworks", method = GET)
-	public Iterable<Framework> query() {
-		return asList(
+	private static final List<Framework> JAVA = asList(
+			new Framework(1, "Spring"),
+			new Framework(2, "Play!"),
+			new Framework(3, "Grails"),
+			new Framework(4, "Hibernate")
+	);
+
+	private static final List<Framework> JAVASCRIPT = asList(
 			new Framework(1, "Angular.js"),
 			new Framework(2, "Backbone"),
 			new Framework(3, "Underscore"),
 			new Framework(4, "jQuery")
-		);
+	);
+
+	private static final Map<String, List<Framework>> MAP;
+
+	static {
+		Map<String, List<Framework>> map = new HashMap<String, List<Framework>>();
+		map.put("java", JAVA);
+		map.put("javascript", JAVASCRIPT);
+		MAP = unmodifiableMap(map);
+	}
+
+	@RequestMapping(value = "/api/frameworks/{lang}", method = GET)
+	public List<Framework> query(@PathVariable("lang") String lang) {
+		return MAP.get(lang.toLowerCase());
 	}
 }

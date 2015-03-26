@@ -2,13 +2,34 @@
 <html>
 <head>
 	<title>Backbone Isomorphic Application</title>
+	<link rel="stylesheet" href="/vendors/bootstrap/dist/css/bootstrap.css">
+	<link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-<div class="header">
-	<h1>Backbone Isomorphic Application</h1>
+<div id="header" class="navbar navbar-default navbar-fixed-top">
+	<div class="container-fluid">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-9">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="Java"></span>
+				<span class="Javascript"></span>
+			</button>
+			<a class="navbar-brand" href="#">Awesome Frameworks</a>
+		</div>
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9">
+			<ul class="nav navbar-nav">
+				<li {{#lang_javascript}}class="active"{{/lang_javascript}}><a href="/frameworks/javascript">Javascript</a></li>
+				<li {{#lang_java}}class="active"{{/lang_java}}><a href="/frameworks/java">Java</a></li>
+			</ul>
+		</div>
+		<!-- /.navbar-collapse -->
+	</div>
 </div>
 
-<div class="content">
+<div id="content" class="content">
 	{{> content}}
 </div>
 

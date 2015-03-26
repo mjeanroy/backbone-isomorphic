@@ -25,15 +25,22 @@
 define(['jquery', 'underscore', 'backbone', 'js/collection/frameworks'], function ($, _, Backbone, Frameworks) {
 
 	return Backbone.View.extend({
+		el: '#content',
 
-		initialize: function() {
-			// If data is set in html
-			var data = $('#_frameworks_').text();
-			if (data) {
-				data = JSON.parse(data);
+		initialize: function(options) {
+			var lang = options.lang || 'java';
+
+			// Isomorphic application
+			var $frameworks = $('#_frameworks_');
+			var data = null;
+			if ($frameworks.length) {
+				data = JSON.parse($frameworks.text());
+				$frameworks.remove();
 			}
 
-			this.collection = new Frameworks();
+			this.collection = new Frameworks(data || [], {
+				lang: lang
+			});
 
 			if (!data) {
 				this.listenToOnce(this.collection, 'sync', this.render);
@@ -52,6 +59,14 @@ define(['jquery', 'underscore', 'backbone', 'js/collection/frameworks'], functio
 				});
 
 			return this;
+		},
+
+		template: '/templates/frameworks.template.html',
+
+		toJSON: function() {
+			return {
+				frameworks: this.collection.toJSON()
+			};
 		}
 	});
 

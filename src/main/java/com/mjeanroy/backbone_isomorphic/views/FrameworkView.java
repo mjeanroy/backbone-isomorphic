@@ -31,8 +31,11 @@ import com.mjeanroy.backbone_isomorphic.controllers.FrameworkController;
 import com.mjeanroy.backbone_isomorphic.models.Framework;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
@@ -45,12 +48,17 @@ public class FrameworkView {
 	@Autowired
 	private FrameworkController frameworkController;
 
-	@RequestMapping(value = { "/", "/frameworks" }, method = GET)
-	public ModelAndView frameworkView() throws JsonProcessingException {
-		Iterable<Framework> frameworks = frameworkController.query();
+	@RequestMapping(value = "/", method = GET)
+	public String frameworkView() throws JsonProcessingException {
+		return "redirect:/frameworks/javascript";
+	}
 
+	@RequestMapping(value = "/frameworks/{lang}", method = GET)
+	public ModelAndView frameworkView(@PathVariable("lang") String lang) throws JsonProcessingException {
+		List<Framework> frameworks = frameworkController.query(lang);
 		ModelAndView modelAndView = new ModelAndMustacheView("frameworks");
 		modelAndView.addObject("frameworks", frameworks);
+		modelAndView.addObject("lang_" + lang.toLowerCase(), true);
 		modelAndView.addObject("_frameworks_", objectMapper.writeValueAsString(frameworks));
 		return modelAndView;
 	}
